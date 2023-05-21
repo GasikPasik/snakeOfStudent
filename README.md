@@ -28,8 +28,8 @@ __В 1 сцене две опции:__
     Start game
     Exit
 
-![ad](sourceForReadme/main_menu.png)
-main_menu.png
+![](sourceForReadme/main_menu.png)
+
 
 __В 2 сцене 4 опции:__
 
