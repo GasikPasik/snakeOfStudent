@@ -45,7 +45,7 @@ BGCYAN='\033[46m'     #  ${BGCYAN}
 BGGRAY='\033[47m'     #  ${BGGRAY}
 BGDEF='\033[49m'      #  ${BGDEF}
 
-sizeField=34
+
 borderChar="${RED}${BGRED}##${NORMAL}"
 mainChar="${BLACK}${BGBLACK}##${NORMAL}"
 playerChar="${GREEN}${BGGREEN}##${NORMAL}"
@@ -58,6 +58,7 @@ dirPlayer=1
 coinOnMap=1
 queueCoin=1
 speed=300
+sizeField=8
 score=${#playerPos[@]}
 
 menuArr=("Start game\n" "Exit")
@@ -98,11 +99,7 @@ function printGameData(){
 function printCenter(){
     printf %s $(line $((`tput cols`/2-$2/2)) "@") | tr "@" " "
     echo -n $1
-}
-
-function clearNext(){
-    printf %s $(line 20 "@") | tr "@" " "
-}
+}              
 
 function drawField(){
     echo
@@ -204,12 +201,12 @@ function gameScene(){
             
             printf %s $(line $((`tput lines`/2-$sizeField)) "@") | tr "@" "\n"
             
-            printGameData "Нажми Q, чтобы выйти"
+            printGameData "Нажми Q, чтобы выйти              "
             echo
-            printGameData "Скорость змеи: $((500-$speed)), размер поля: $sizeField"
+            printGameData "Скорость змеи: $((500-$speed)), размер поля: $sizeField              "
             echo
-            printGameData "Очков: $score"
-            clearNext
+            printGameData "Очков: $score              "
+            
             printf %s $(line 2 "@") | tr "@" "\n"
 
             lastMoveTime=$(($(date +%s%N)/1000000))
@@ -222,19 +219,16 @@ function gameScene(){
             if [ $ret != 0 ]; then
              
                 printf %s $(line 2 "@") | tr "@" "\n"
-                printGameData "Поражение"
-                clearNext
+                printGameData "Поражение              "
                 echo
 
                 if [ $ret == 1 ]; then
-                    printGameData "Это была стена"
+                    printGameData "Это была стена              "
                 elif [ $ret == 2 ]; then
-                    printGameData "Ты врезался в сам себя"
+                    printGameData "Ты врезался в сам себя              "
                 fi
                 echo 
-                printGameData "Нажми enter или q, чтобы перейти в меню"
-
-                clearNext
+                printGameData "Нажми r, чтобы перезапустить, или другую любую, чтобы выйти              "
                 printf %s $(line 8 "@") | tr "@" "\n"
                 return 0
 
@@ -242,9 +236,8 @@ function gameScene(){
         fi
 
         spawnCoin
-        ret=$?
-        if [ $ret == 1 ]; then
-            echo "Победа"
+        if [ $? == 1 ]; then
+            echo "Победа              "
             return 0
         fi
 
@@ -276,7 +269,6 @@ function gameScene(){
 
 function preGameScene(){
     clear
-    sizeField=8
     tput sc 
     local curMenu=0
     while :
@@ -402,19 +394,23 @@ function mainMenuScene(){
                         
                         preGameScene
                         if [ $? -eq 0 ]; then
-                            initGame
-                            gameScene
-                            if [ $? -eq 0 ]; then
-                                while : 
-                                do
+                            while :
+                            do
+                                initGame
+                                gameScene
+                                if [ $? -eq 0 ]; then
+
                                     read -n 1 -s 
                                     case $REPLY in
-                                    q | Q | й | Й | "")
-                                        break
+                                    r | R | к | К | "")
+                                        continue
                                     ;;
                                     esac
-                                done
-                            fi
+                                    
+                                    break
+                                    
+                                fi
+                            done
                         fi
                         clear
                 fi
