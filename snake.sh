@@ -229,7 +229,7 @@ function gameScene(){
                 fi
                 echo 
                 printGameData "Нажми r, чтобы перезапустить, или другую любую, чтобы выйти              "
-                printf %s $(line 8 "@") | tr "@" "\n"
+                echo
                 return 0
 
             fi
@@ -410,6 +410,7 @@ function mainMenuScene(){
                                     break
                                     
                                 fi
+                                break
                             done
                         fi
                         clear
